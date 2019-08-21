@@ -11,18 +11,18 @@ class Leads extends Component {
     let allLeads = leads.length ? (
       leads.map(lead => (
         <tr key={lead.id}>
-          <th>{lead.id}</th>
-          <th>{lead.name}</th>
-          <th>{lead.email}</th>
-          <th>{lead.message}</th>
-          <th>
+          <td>{lead.id}</td>
+          <td>{lead.name}</td>
+          <td>{lead.email}</td>
+          <td>{lead.message}</td>
+          <td>
             <button
               onClick={() => this.props.deleteLead(lead.id)}
               className="btn btn-danger"
             >
               Delete
             </button>
-          </th>
+          </td>
         </tr>
       ))
     ) : (
@@ -34,6 +34,15 @@ class Leads extends Component {
       <>
         <h2>Leads</h2>
         <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Message</th>
+              <th />
+            </tr>
+          </thead>
           <thead>{allLeads}</thead>
           <tbody>
             <tr />
