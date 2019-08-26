@@ -1,5 +1,6 @@
 import axios from "axios";
-
+import { createMessage, deleteMessage } from "./messages";
+import { create } from "domain";
 // get leads action
 export const getLeads = () => dispatch => {
   axios
@@ -14,6 +15,7 @@ export const deleteLead = id => dispatch => {
   axios
     .delete(`api/leads/${id}/`)
     .then(res => {
+      dispatch(deleteMessage({ deleteLead: "Lead deleted" }));
       dispatch({ type: "DELETE_LEAD", payload: id });
     })
     .catch(err => console.log("Error", err));
@@ -23,7 +25,14 @@ export const addLead = lead => dispatch => {
   axios
     .post("api/leads/", lead)
     .then(res => {
+      dispatch(createMessage({ createLead: "Lead Created" }));
       dispatch({ type: "ADD_LEAD", payload: res.data });
     })
-    .catch(err => console.log("Error", err));
+    .catch(err => {
+      const errors = {
+        msg: err.response.data,
+        status: err.response.status
+      };
+      dispatch({ type: "GET_ERRORS", payload: errors });
+    });
 };
