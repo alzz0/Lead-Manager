@@ -1,6 +1,7 @@
 import axios from "axios";
-import { createMessage, deleteMessage } from "./messages";
-import { create } from "domain";
+
+import { createMessage, deleteMessage, returnErrors } from "./messages";
+
 // get leads action
 export const getLeads = () => dispatch => {
   axios
@@ -8,7 +9,9 @@ export const getLeads = () => dispatch => {
     .then(res => {
       dispatch({ type: "GET_LEADS", payload: res.data });
     })
-    .catch(err => console.log("Error", err));
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 export const deleteLead = id => dispatch => {
@@ -29,10 +32,6 @@ export const addLead = lead => dispatch => {
       dispatch({ type: "ADD_LEAD", payload: res.data });
     })
     .catch(err => {
-      const errors = {
-        msg: err.response.data,
-        status: err.response.status
-      };
-      dispatch({ type: "GET_ERRORS", payload: errors });
+      dispatch(returnErrors(err.response.data, err.response.status));
     });
 };

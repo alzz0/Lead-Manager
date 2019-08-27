@@ -39,14 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party
     "rest_framework",
+    "knox",
     # personal
     "leads",
-    "frontend"
+    "frontend",
+    "accounts"
 
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        "knox.auth.TokenAuthentication",
     )
 }
 MIDDLEWARE = [
