@@ -20,6 +20,11 @@ export default function(state = initState, action) {
         ...state,
         leads: [...state.leads, action.payload]
       };
+    case "LOGOUT":
+      return {
+        ...state,
+        leads: []
+      };
     default:
       return state;
   }
