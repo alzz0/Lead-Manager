@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { createMessage } from "../redux/actions/messages";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import { register, passwordNotMatch } from "../redux/actions/auth";
 class Register extends Component {
   state = { username: "", email: "", password: "", password2: "" };
 
@@ -10,9 +13,23 @@ class Register extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    console.log(this.state);
+
+    const { password, password2, username, email } = this.state;
+    if (password !== password2) {
+      this.props.createMessage({ passwordNotMatch: "Passwords do not Match" });
+    } else {
+      const newUser = {
+        email,
+        password,
+        username
+      };
+      this.props.register(newUser);
+    }
   };
   render() {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
     const { username, email, password, password2 } = this.state;
     return (
       <div className="col-md-6 m-auto">
@@ -73,4 +90,11 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+export default connect(
+  mapStateToProps,
+  { register, passwordNotMatch, createMessage }
+)(Register);

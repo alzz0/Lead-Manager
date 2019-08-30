@@ -24,7 +24,7 @@ class Header extends Component {
             </a>
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
               {!this.props.isAuthenticated ? (
-                <div>
+                <>
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/login">
                       Login
@@ -35,14 +35,21 @@ class Header extends Component {
                       Register
                     </NavLink>
                   </li>
-                </div>
+                </>
               ) : (
-                <button
-                  className="nav-link btn btn-info btn-sm text-light"
-                  onClick={this.props.logout}
-                >
-                  Logout
-                </button>
+                <>
+                  <ul className="navbar-nav ml-auto mt-2 my-lg-0">
+                    <span className="navbar-text mr-3">
+                      <strong>{`Welcome ${this.props.user.username}`}</strong>
+                    </span>
+                    <button
+                      className="nav-link btn btn-info btn-sm text-light"
+                      onClick={this.props.logout}
+                    >
+                      Logout
+                    </button>
+                  </ul>
+                </>
               )}
             </ul>
           </div>
@@ -52,7 +59,8 @@ class Header extends Component {
   }
 }
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 export default connect(
   mapStateToProps,

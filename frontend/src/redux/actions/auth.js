@@ -7,22 +7,9 @@ export const loadUser = () => (dispatch, getState) => {
   //user loading
   dispatch({ type: "USER_LOADING" });
   //get token from state
-  const token = getState().auth.token;
 
-  // headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
-  // if token add to headers config
-
-  if (token) {
-    config.headers["Authorization"] = `Token${token}`;
-  }
   axios
-    .get("/api/auth/user", config)
+    .get("/api/auth/user", tokenConfig(getState))
     .then(res => {
       dispatch({
         type: "USER_LOADED",
@@ -62,7 +49,23 @@ export const loginUser = (username, password) => dispatch => {
     });
 };
 
-// logout user
+//register user
+export const register = ({ username, password, email }) => dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+  const body = JSON.stringify({ username, password, email });
+  axios
+    .post("/api/auth/register", body, config)
+    .then(res => {
+      dispatch({ type: "REGISTER_SUCCESS", payload: res.data });
+    })
+    .catch(err => {
+      dispatch({ type: "REGISTER_FAIL" });
+    });
+};
 
 // LOGOUT USER
 export const logout = () => (dispatch, getState) => {
@@ -97,3 +100,4 @@ export const tokenConfig = getState => {
 
   return config;
 };
+// setup config with token - helper function
